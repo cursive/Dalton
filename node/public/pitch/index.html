@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<title>Pitch Detector</title>
+
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+
+	}
+		body { font: 14pt 'Alike', sans-serif;}
+		#note { font-size: 164px; }
+		.droptarget { background-color: #348781}
+		div.confident { color: black; }
+		div.vague { color: lightgrey; }
+		#note { display: inline-block; height:180px; text-align: left;}
+
+		#detector { 
+			width: 1000px; 
+			height: 1000px; 
+			text-align: center;
+			background-color: #eeeeee;
+		 }
+		#output { width: 300px; height: 42px; }
+		#flat { display: none; }
+		#sharp { display: none; }
+		.flat #flat { display: inline; }
+		.sharp #sharp { display: inline; }
+		.ball{
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			background-color: #ff0000;
+			border-radius: 50%;
+			top: 0;
+			left: 0;
+		}
+
+	</style>
+
+</head>
+<body>
+	<script src="js/pitchdetect.js"></script>
+
+
+	<!--<button onclick="updatePitch(0);">sample</button>-->
+
+	<div id="detector" class="vague">
+		<div class="pitch"><span id="pitch">--</span>Hz</div>
+		<div class="note"><span id="note">--</span></div>   
+		<canvas id="output" width=300 height=42></canvas>
+		<div id="detune"><span id="detune_amt">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
+		<div class="ball"></div>
+	</div>
+
+</script>
+</body>
+</html>

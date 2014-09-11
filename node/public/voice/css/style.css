@@ -1,0 +1,264 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+@font-face {
+	font-family: 'f1';
+	src: url("../fonts/AktivGrotesk_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f2';
+	src: url("../fonts/AktivGrotesk_Std_Hairline.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f3';
+	src: url("../fonts/Aller_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f4';
+	src: url("../fonts/AllerDisplay_Std_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f5';
+	src: url("../fonts/Blenny_Blk.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f6';
+	src: url("../fonts/CoHeadline_Bd.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f7';
+	src: url("../fonts/Dedica_Bd.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f8';
+	src: url("../fonts/Effra_Std_HeIt.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f9';
+	src: url("../fonts/Elevon_Std_FourG.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f10';
+	src: url("../fonts/Foco_Bd.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f11';
+	src: url("../fonts/Grueber_Bd.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f2';
+	src: url("../fonts/IF_Std_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f12';
+	src: url("../fonts/Lexia_XBd.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f13';
+	src: url("../fonts/Magpie_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f14';
+	src: url("../fonts/Plume_Ad.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f15';
+	src: url("../fonts/Plume_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f16';
+	src: url("../fonts/Prometo_Blk.ttf") format("truetype");
+}
+
+
+body {
+	background-color: #ff0000;
+}
+
+.f1 {
+	font-family: 'f1';
+}
+
+.f2 {
+	font-family: 'f2';
+}
+
+.f3 {
+	font-family: 'f3';
+}
+
+.f4 {
+	font-family: 'f4';
+}
+
+.f5 {
+	font-family: 'f5';
+}
+
+.f6 {
+	font-family: 'f6';
+}
+
+.f7 {
+	font-family: 'f7';
+}
+
+.f8 {
+	font-family: 'f8';
+}
+
+.f9 {
+	font-family: 'f9';
+}
+
+.f10 {
+	font-family: 'f10';
+}
+
+.f11 {
+	font-family: 'f11';
+}
+
+.f12 {
+	font-family: 'f12';
+}
+
+.f13 {
+	font-family: 'f13';
+}
+
+.f14 {
+	font-family: 'f14';
+}
+
+.f15 {
+	font-family: 'f15';
+}
+
+.f16 {
+	font-family: 'f16';
+}
+
+.ui {
+	width: 100%;
+	height: 100%;
+	background-image: url("../img/bg.png");
+	position: absolute;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+	top: 0;
+	left: 0;
+}
+
+button {
+	padding: 20px;
+}
+
+textarea {
+	width: 1000px;
+	height: 100px;
+}
+
+.display {
+	position: absolute;
+	width: 300px;
+	height: 100px;
+	top: 1080px;
+	left: 1600px;
+	border: 1px solid white;
+}
+
+video {
+	float: right;
+}
+
+.circle {
+	font-family: 'f1';
+	color: #5abfee;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 12px;
+	text-align: center;
+	padding-top: 20px;
+	box-sizing: border-box;
+	background-color: #fff;
+}
+
+.volume {
+	/*background-color: red;*/
+	left: 200px;
+}
+
+.pitch {
+	/*background-color: green;*/
+}
+
+.messages {
+	position: absolute;
+	left: 0;
+	width: 100%;
+}
+
+.message {
+	padding-left: 40px;
+	font-size: 30px;
+	width: 100%;
+	text-align: left;
+	bottom: 1px solid red;
+	padding-bottom: 20px;
+	transition: 0.5s;
+	color: white;
+}
+
+.message.active {
+	position: absolute;
+	font-size: 100px;
+}
+
+.hidden {
+	display: none;
+}
+
+.buttons {
+	position: absolute;
+	top: 0;
+	left: 500px;
+}
