@@ -6,14 +6,12 @@ var textAreaID = 'speech-page-content';
 var keyIsDown=false;
 $(document).ready(function() {
 	initRecognition();
-	initButtons();
-	// initAudioStream();
-
 	window.addEventListener("keypress", kd, false);
 	window.addEventListener("keyup", ku, false);
 	$("textarea").blur();
 
 });
+
 
 
 /**
@@ -27,12 +25,12 @@ socket.on('promptScreen', function(msg){
 });
 
 
+
+
 /**
 End new from Dan
 **/
 function ku(){
-
-	
 	if(keyIsDown){
 		console.log("ku")
 		recognition.stop();
@@ -48,9 +46,6 @@ function kd(){
 	}
 }
 
-// for(var i=0;i<17;i++){
-// console.log(".f"+i+" {font-family: 'f"+i+"';}");
-// }
 
 function initRecognition(){
 	try {
@@ -85,17 +80,7 @@ function initRecognition(){
 	};
 }
 
-function initButtons(){
-	$('.start').click(function(){
-		startRecognition();
-	});
 
-	$('.end').click(function(){
-		console.log("stop")
-		recognition.stop();
-		// newMessage();
-	});
-}
 
 function startRecognition () {
 	console.log("start")
@@ -106,11 +91,12 @@ function startRecognition () {
 function newMessage(){
 	console.log($("textarea").text())
 	$(".message").removeClass("active");
-	var r=Math.floor(Math.random()*16)
-	console.log("f"+r)
+	var r1=Math.ceil(Math.random()*5)
+	var r2=Math.ceil(Math.random()*5)
+	console.log("f"+r1+""+r2)
 	var msg=$("#speech-page-content").val()
-	msg =msg.substr(1, msg.length)
-	$(".messages").append('<div class="message active f'+r+'">'+msg+'</div>');
+	// msg =msg.substr(1, msg.length)
+	$(".messages").append('<div class="message active f'+r1+''+r2+'">'+msg+'</div>');
 	$("#speech-page-content").val("")
 	if($(".messages").height()>1000){
 		TweenMax.to(".messages",0.5,{top:"-=100"})
@@ -168,6 +154,28 @@ Analysis.prototype.newPhrase = function ()	{
 
 var a = new Analysis();
 
+
+/*
+Dan stuff
+*/
+
+function t(){
+	$("#speech-page-content").val(phrases[Math.ceil(phrases.length*Math.random())])
+	newMessage();
+}
+
+
+var phrases=["Don't cry because it's over, smile because it happened",
+"Be yourself; everyone else is already taken",
+"Be who you are and say what you feel, because those who mind don't matter, and those who matter don't mind",
+"Two things are infinite: the universe and human stupidity; and I'm not sure about the universe",
+"You know you're in love when you can't fall asleep because reality is finally better than your dreams",
+"So many books, so little time",
+"You only live once, but if you do it right, once is enough",
+"A room without books is like a body without a soul",
+"Be the change that you wish to see in the world",
+"In three words I can sum up everything I've learned about life: it goes on",
+"No one can make you feel inferior without your consent."];
 
 
 // navigator.getUserMedia = navigator.webkitGetUserMedia 

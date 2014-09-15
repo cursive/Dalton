@@ -3,150 +3,225 @@
 	margin: 0;
 }
 
+.ui {
+	width: 1024px;
+	height: 768px;
+	background-image: url("../img/bg.png");
+	position: absolute;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+	top: 0;
+	left: 0;
+}
+
+.messages {
+	position: absolute;
+	left: 0;
+	width: 100%;
+}
+
+.message {
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-top: 20px;
+	line-height: 30px;
+	box-sizing: border-box;
+	font-size: 30px;
+	width: 100%;
+	text-align: left;
+	transition: 0.5s;
+	color: white;
+}
+
+.message.active {
+	font-size: 60px;
+	line-height: 90px;
+}
+
+.hidden {
+	display: none;
+}
+
+/*
+Ignore
+*/
+
+button {
+	padding: 20px;
+}
+
+textarea {
+	width: 1000px;
+	height: 100px;
+}
+
+.display {
+	position: absolute;
+	width: 300px;
+	height: 100px;
+	top: 1080px;
+	left: 1600px;
+	border: 1px solid white;
+}
+
+.buttons {
+	position: absolute;
+	top: 0;
+	left: 500px;
+}
+
 @font-face {
-	font-family: 'f1';
+	font-family: 'f21';
 	src: url("../fonts/AktivGrotesk_Rg.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f2';
+	font-family: 'f11';
 	src: url("../fonts/AktivGrotesk_Std_Hairline.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f3';
+	font-family: 'f23';
 	src: url("../fonts/Aller_Rg.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f4';
+	font-family: 'f45';
 	src: url("../fonts/AllerDisplay_Std_Rg.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f5';
+	font-family: 'f54';
 	src: url("../fonts/Blenny_Blk.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f6';
+	font-family: 'f42';
 	src: url("../fonts/CoHeadline_Bd.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f7';
+	font-family: 'f34';
 	src: url("../fonts/Dedica_Bd.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f8';
+	font-family: 'f41';
 	src: url("../fonts/Effra_Std_HeIt.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f9';
+	font-family: 'f55';
 	src: url("../fonts/Elevon_Std_FourG.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f10';
+	font-family: 'f33';
 	src: url("../fonts/Foco_Bd.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f11';
+	font-family: 'f44';
 	src: url("../fonts/Grueber_Bd.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f2';
+	font-family: 'f22';
 	src: url("../fonts/IF_Std_Rg.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f12';
+	font-family: 'f43';
 	src: url("../fonts/Lexia_XBd.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f13';
+	font-family: 'f14';
 	src: url("../fonts/Magpie_Rg.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f14';
+	font-family: 'f53';
 	src: url("../fonts/Plume_Ad.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f15';
+	font-family: 'f24';
 	src: url("../fonts/Plume_Rg.ttf") format("truetype");
 }
 
 
 @font-face {
-	font-family: 'f16';
+	font-family: 'f52';
 	src: url("../fonts/Prometo_Blk.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f32';
+	src: url("../fonts/Oscine.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f35';
+	src: url("../fonts/Royalty_Obese.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f51';
+	src: url("../fonts/Soleto_Blk.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f12';
+	src: url("../fonts/Stroudley_Lt.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f31';
+	src: url("../fonts/Tondo_Std_Bd.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f25';
+	src: url("../fonts/Tornac_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f15';
+	src: url("../fonts/Verveine_Rg.ttf") format("truetype");
+}
+
+
+@font-face {
+	font-family: 'f13';
+	src: url("../fonts/Viato_Lt.ttf") format("truetype");
 }
 
 
 body {
 	background-color: #ff0000;
-}
-
-.f1 {
-	font-family: 'f1';
-}
-
-.f2 {
-	font-family: 'f2';
-}
-
-.f3 {
-	font-family: 'f3';
-}
-
-.f4 {
-	font-family: 'f4';
-}
-
-.f5 {
-	font-family: 'f5';
-}
-
-.f6 {
-	font-family: 'f6';
-}
-
-.f7 {
-	font-family: 'f7';
-}
-
-.f8 {
-	font-family: 'f8';
-}
-
-.f9 {
-	font-family: 'f9';
-}
-
-.f10 {
-	font-family: 'f10';
 }
 
 .f11 {
@@ -169,96 +244,82 @@ body {
 	font-family: 'f15';
 }
 
-.f16 {
-	font-family: 'f16';
+.f21 {
+	font-family: 'f21';
 }
 
-.ui {
-	width: 100%;
-	height: 100%;
-	background-image: url("../img/bg.png");
-	position: absolute;
-	-webkit-background-size: 100%;
-	background-size: 100%;
-	top: 0;
-	left: 0;
+.f22 {
+	font-family: 'f22';
 }
 
-button {
-	padding: 20px;
+.f23 {
+	font-family: 'f23';
 }
 
-textarea {
-	width: 1000px;
-	height: 100px;
+.f24 {
+	font-family: 'f24';
 }
 
-.display {
-	position: absolute;
-	width: 300px;
-	height: 100px;
-	top: 1080px;
-	left: 1600px;
-	border: 1px solid white;
+.f25 {
+	font-family: 'f25';
 }
 
-video {
-	float: right;
+.f31 {
+	font-family: 'f31';
 }
 
-.circle {
-	font-family: 'f1';
-	color: #5abfee;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	font-size: 12px;
-	text-align: center;
-	padding-top: 20px;
-	box-sizing: border-box;
-	background-color: #fff;
+.f32 {
+	font-family: 'f32';
 }
 
-.volume {
-	/*background-color: red;*/
-	left: 200px;
+.f33 {
+	font-family: 'f33';
 }
 
-.pitch {
-	/*background-color: green;*/
+.f34 {
+	font-family: 'f34';
 }
 
-.messages {
-	position: absolute;
-	left: 0;
-	width: 100%;
+.f35 {
+	font-family: 'f35';
 }
 
-.message {
-	padding-left: 40px;
-	font-size: 30px;
-	width: 100%;
-	text-align: left;
-	bottom: 1px solid red;
-	padding-bottom: 20px;
-	transition: 0.5s;
-	color: white;
+.f41 {
+	font-family: 'f41';
 }
 
-.message.active {
-	position: absolute;
-	font-size: 100px;
+.f42 {
+	font-family: 'f42';
 }
 
-.hidden {
-	display: none;
+.f43 {
+	font-family: 'f43';
 }
 
-.buttons {
-	position: absolute;
-	top: 0;
-	left: 500px;
+.f44 {
+	font-family: 'f44';
+}
+
+.f45 {
+	font-family: 'f45';
+}
+
+.f51 {
+	font-family: 'f51';
+}
+
+.f52 {
+	font-family: 'f52';
+}
+
+.f53 {
+	font-family: 'f53';
+}
+
+.f54 {
+	font-family: 'f54';
+}
+
+.f55 {
+	font-family: 'f55';
 }
