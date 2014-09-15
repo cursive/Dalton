@@ -198,6 +198,13 @@ Analysis.prototype.mapValues = function (input)	{
 	}
 };
 
+Analysis.prototype.getFinalPitchAmp = function ()	{
+	return this.mapValues({
+		amp: 	this.amp,
+		pitch: 	this.pitch
+	});
+};
+
 Analysis.prototype.printAverages = function ()	{
 	this.$pitch.text(this.pitch);
 	this.$amp.text(this.amp);
