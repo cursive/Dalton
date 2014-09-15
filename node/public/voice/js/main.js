@@ -103,15 +103,17 @@ function newMessage(){
 	if($(".messages").height()>1000){
 		TweenMax.to(".messages",0.5,{top:"-=100"})
 	}
+
+	var finalPitchAmp = a.getFinalPitchAmp();
+	saveLatest(msg, finalPitchAmp.pitch, finalPitchAmp.amp);
 }
 
 
-function saveLatest(text, pitch, amplitude, font)	{
+function saveLatest(text, pitch, amplitude)	{
 	socket.emit('newVoiceData', {
 		text: 			'test',
 		pitch: 			10,
-		amplitude: 		10,
-		font: 			'Test Font'
+		amplitude: 		10
 	});
 }
 
@@ -199,10 +201,12 @@ Analysis.prototype.mapValues = function (input)	{
 };
 
 Analysis.prototype.getFinalPitchAmp = function ()	{
-	return this.mapValues({
+	var retVal = this.mapValues({
 		amp: 	this.amp,
 		pitch: 	this.pitch
 	});
+	this.newPhrase()
+	return retVal;
 };
 
 Analysis.prototype.printAverages = function ()	{
@@ -214,6 +218,7 @@ Analysis.prototype.printAverages = function ()	{
 
 Analysis.prototype.newPhrase = function ()	{
 	this.packets = [];
+	this.pitch = this.amp = 0;
 };
 
 var a = new Analysis();
