@@ -2,7 +2,9 @@ var fs = require('fs'),
     http = require('http'),
     https = require('https'),
     express = require('express'),
-    morgan = require('morgan');
+    morgan = require('morgan'),
+    fs = require('fs'),
+    SerialPort = require('serialport').SerialPort;
     
 
 var port = 8080;
@@ -15,26 +17,23 @@ var options = {
 var app = express();
 
 app.use(express.static(__dirname + '/public'));   // set the static files location /public/img will be /img for users
-app.use(morgan('dev'));           //
-
-
-
-
+app.use(morgan('dev'));
 
 var server = https.createServer(options, app).listen(port, function(){
     console.log("Express server listening on port " + port);
 });
 
+
+/*
+#####################################
+			SOCKET.IO
+#####################################
+*/
+
 var io = require('socket.io')(server);
 
-
-var OSC_HOST = '0.0.0.0',
-	OSC_PORT = 3333;
-var osc = require('node-osc');
-
 var SOCKET_CLIENT = null;
-console.log('Starting OSC server on ' + OSC_HOST + ':' + OSC_PORT)
-var oscServer = new osc.Server(OSC_PORT, OSC_HOST);
+
 
 //	Get the socket client
 io.on('connection', function (socket)	{
@@ -50,16 +49,34 @@ io.on('connection', function (socket)	{
         console.log('promptScreen: '+msg);
     });  
 
-    SOCKET_CLIENT = socket;
+    socket.on('newVoiceData', function (data)	{
+		//	get the json (string, timestamp, pitch, amplitude, font string)
+		console.log(data);
+		saveToFileSystem(data);
+	});
+
+	SOCKET_CLIENT = socket;
 
 });
 
-io.on('disconnect', function (socker)	{
+io.on('disconnect', function (socket)	{
 	console.log('Client disconnected');
 	if (socket == SOCKET_CLIENT)	{
 		SOCKET_CLIENT = null;
 	}
 });
+
+/*
+#####################################
+				O S C
+#####################################
+*/
+var OSC_HOST = '0.0.0.0',
+	OSC_PORT = 3333;
+var osc = require('node-osc');
+console.log('Starting OSC server on ' + OSC_HOST + ':' + OSC_PORT)
+var oscServer = new osc.Server(OSC_PORT, OSC_HOST);
+
 
 //	Forward incoming OSC data
 var LATEST_DB, LATEST_PITCH;
@@ -100,6 +117,107 @@ app.get('/', function (req, res) {
 });
 
 
-//	OSC
-var OSC_HOST = '0.0.0.0',
-	OSC_PORT = 3333;
+
+/*
+#####################################
+				SERIAL
+#####################################
+*/
+var files = fs.readdirSync('/dev');
+files.forEach(function (file)	{
+
+	fs.lstat('/dev/' + file, function (err, stats)	{
+
+		if (file.indexOf('tty.usbmodem') != -1 || file.indexOf('tty.usbserial') != -1)	{
+
+			var port = '/dev/' + file;
+			
+			console.log('Got serial port: ', port);
+
+			var serial = new SerialPort(port, {
+				baudrate: 	9600
+			});
+
+			serial.open(function ()	{
+				console.log('Opening ', port);
+			});
+
+			var lastTrackedButtonState = -1;
+			var TERMINATOR = '%';
+			var incomingStringBuffer = "";
+			serial.on('data', function (data)	{
+				var dataString = data.toString();
+				incomingStringBuffer += dataString;
+				if (dataString.indexOf(TERMINATOR) != -1)	{
+					var incomingString = incomingStringBuffer.split(TERMINATOR)[0];
+					incomingStringBuffer = "";
+					var newButtonState = Number(incomingString);
+					if (newButtonState != lastTrackedButtonState && SOCKET_CLIENT != null)	{
+						SOCKET_CLIENT.emit('latestButtonState', {
+							button: 	newButtonState == 1	
+						});
+						lastTrackedButtonState = newButtonState;
+						console.log(newButtonState == 1);
+					}
+				}
+			});
+		}
+	});
+});
+
+
+/*
+#####################################
+		SAVE TO FILE SYSTEM
+
+Files will be saved individually and
+also to a single master JSON file. 
+
+#####################################
+*/
+var MASTER_JSON = [];
+(function ()	{
+	fs.readFile('./saved_json/master.json', 'utf8', function (err, data) {
+		if (err)	 {
+			MASTER_JSON = [];
+			console.log('Error loading MASTER JSON 0x0');
+		}	else 	{
+			try 	{
+				var t_json = JSON.parse(data);
+				MASTER_JSON = t_json;
+				console.log('Loaded MASTER JSON 0x1');
+			}	
+			catch (e) 	{
+				MASTER_JSON = [];
+				console.log('Error loading MASTER JSON 0x2');
+			}
+		}
+	});
+})();
+
+function saveToFileSystem(data)	{
+	var fileName = new Date().getTime();
+	data.timestamp = fileName;
+
+	var prettyJson = JSON.stringify(data, null, 4);
+	
+	var path = ('./saved_json/individual/' + fileName + '.json');
+
+	fs.writeFile(path, prettyJson, function(err)	{
+		if (err)	{
+			console.log('Write failed...');
+		}	else 	{
+			console.log('JSON Saved');
+		}
+	});
+
+	MASTER_JSON.push(data);
+	var masterPath = './saved_json/master.json';
+	fs.writeFile(masterPath, JSON.stringify(MASTER_JSON, null, 4), function (err)	{
+		if (err)	{
+			console.log('Write failed...');
+		}	else 	{
+			console.log('JSON Saved');
+		}
+	});
+}
