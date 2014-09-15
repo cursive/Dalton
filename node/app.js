@@ -17,11 +17,7 @@ var options = {
 var app = express();
 
 app.use(express.static(__dirname + '/public'));   // set the static files location /public/img will be /img for users
-app.use(morgan('dev'));           //
-
-
-
-
+app.use(morgan('dev'));
 
 var server = https.createServer(options, app).listen(port, function(){
     console.log("Express server listening on port " + port);
