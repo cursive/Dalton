@@ -119,6 +119,17 @@ function newMessage(){
 	}
 }
 
+
+function saveLatest(text, pitch, amplitude, font)	{
+	socket.emit('newVoiceData', {
+		text: 			'test',
+		pitch: 			10,
+		amplitude: 		10,
+		font: 			'Test Font'
+	});
+}
+
+
 /*
 	BUTTON MANAGER
 */

@@ -53,7 +53,13 @@ io.on('connection', function (socket)	{
         console.log('promptScreen: '+msg);
     });  
 
-    SOCKET_CLIENT = socket;
+    socket.on('newVoiceData', function (data)	{
+		//	get the json (string, timestamp, pitch, amplitude, font string)
+		console.log(data);
+		saveToFileSystem(data);
+	});
+
+	SOCKET_CLIENT = socket;
 
 });
 
@@ -162,3 +168,60 @@ files.forEach(function (file)	{
 		}
 	});
 });
+
+
+/*
+#####################################
+		SAVE TO FILE SYSTEM
+
+Files will be saved individually and
+also to a single master JSON file. 
+
+#####################################
+*/
+var MASTER_JSON = [];
+(function ()	{
+	fs.readFile('./saved_json/master.json', 'utf8', function (err, data) {
+		if (err)	 {
+			MASTER_JSON = [];
+			console.log('Error loading MASTER JSON 0x0');
+		}	else 	{
+			try 	{
+				var t_json = JSON.parse(data);
+				MASTER_JSON = t_json;
+				console.log('Loaded MASTER JSON 0x1');
+			}	
+			catch (e) 	{
+				MASTER_JSON = [];
+				console.log('Error loading MASTER JSON 0x2');
+			}
+		}
+	});
+})();
+
+function saveToFileSystem(data)	{
+	var fileName = new Date().getTime();
+	data.timestamp = fileName;
+
+	var prettyJson = JSON.stringify(data, null, 4);
+	
+	var path = ('./saved_json/individual/' + fileName + '.json');
+
+	fs.writeFile(path, prettyJson, function(err)	{
+		if (err)	{
+			console.log('Write failed...');
+		}	else 	{
+			console.log('JSON Saved');
+		}
+	});
+
+	MASTER_JSON.push(data);
+	var masterPath = './saved_json/master.json';
+	fs.writeFile(masterPath, JSON.stringify(MASTER_JSON, null, 4), function (err)	{
+		if (err)	{
+			console.log('Write failed...');
+		}	else 	{
+			console.log('JSON Saved');
+		}
+	});
+}
