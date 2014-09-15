@@ -1,9 +1,12 @@
 var socket = io();
 var recognition;
 var interimResult = '';
+var scrollBoundary=600;
 var textArea = $('#speech-page-content');
 var textAreaID = 'speech-page-content';
 var keyIsDown=false;
+var r1=Math.ceil(Math.random()*5)
+var r2=Math.ceil(Math.random()*5)
 $(document).ready(function() {
 	initRecognition();
 	window.addEventListener("keypress", kd, false);
@@ -22,6 +25,8 @@ New from Dan
 
 socket.on('promptScreen', function(msg){
 	console.log("Prompt: "+msg);
+	r1=Math.ceil(Math.random()*5)
+	r2=Math.ceil(Math.random()*5)
 	$("#speech-page-content").val(msg)
 	newMessage();
 });
@@ -74,10 +79,8 @@ function initRecognition(){
 		}
 	};
 	recognition.onend = function() {
-		
 		console.log($("#speech-page-content").val())
 		newMessage();
-		// $("textarea").value()
 		console.log("onend")
 	};
 }
@@ -93,108 +96,108 @@ function startRecognition () {
 function newMessage(){
 	console.log($("textarea").text())
 	$(".message").removeClass("active");
-	var r1=Math.ceil(Math.random()*5)
-	var r2=Math.ceil(Math.random()*5)
 	console.log("f"+r1+""+r2)
 	var msg=$("#speech-page-content").val()
-	// msg =msg.substr(1, msg.length)
 	$(".messages").append('<div class="message active f'+r1+''+r2+'">'+msg+'</div>');
+	$(".messageSmall").text(msg);
 	$("#speech-page-content").val("")
-	if($(".messages").height()>1000){
-		TweenMax.to(".messages",0.5,{top:"-=100"})
+	if($(".messages").height()>scrollBoundary){
+		var h=$(".messageSmall").height();
+		console.log("height: "+$(".message:last-child").height())
+		TweenMax.to(".messages",0.5,{top:"-="+h})
 	}
 }
 
 
+
 function saveLatest(text, pitch, amplitude, font)	{
 	socket.emit('newVoiceData', {
-		text: 			'test',
+		text: 			$("#speech-page-content").val(),
 		pitch: 			10,
-		amplitude: 		10,
-		font: 			'Test Font'
+		amplitude: 		10
 	});
 }
 
 
 /*
 	BUTTON MANAGER
-*/
-var ButtonManager = function ()	{
-	var self = this;
-	self.socket = GLOBAL_SOCKET;
-	self.socket.on('latestButtonState', function (data)	{
-		console.log('received button state:', data.button);
-	});
-};
-var b = ButtonManager();
+	*/
+	var ButtonManager = function ()	{
+		var self = this;
+		self.socket = GLOBAL_SOCKET;
+		self.socket.on('latestButtonState', function (data)	{
+			console.log('received button state:', data.button);
+		});
+	};
+	var b = ButtonManager();
 
 /*
 	RECEIVE PITCH ANALYSIS
-*/
-var Analysis = function ()	{
-	var self = this;
-	self.packets = [];
-	self.sampleLength = 100;
-	self.amp = 0;
-	self.pitch = 0;
-	self.socket = GLOBAL_SOCKET;
+	*/
+	var Analysis = function ()	{
+		var self = this;
+		self.packets = [];
+		self.sampleLength = 100;
+		self.amp = 0;
+		self.pitch = 0;
+		self.socket = GLOBAL_SOCKET;
 
-	self.pitchRange = {
-		low: 	0,
-		high: 	127
+		self.pitchRange = {
+			low: 	0,
+			high: 	127
+		};
+
+		self.ampRange = {
+			low: 	40,
+			high: 	90
+		};
+
+		self.socket.on('pitchAmpPacket', function(data)	{
+			self.pushNewPacket(data);
+			self.calculateAverages();
+			self.printAverages();
+		});
+
+		self.$pitch = $('#pitch');
+		self.$amp = $('#amp');
 	};
 
-	self.ampRange = {
-		low: 	40,
-		high: 	90
+	Analysis.prototype.boundWithBounds = function (value, bounds)	{
+		value = value > bounds.high ? bounds.high : value;
+		value = value < bounds.low ? bounds.low : value;
+		return value;
+	}
+
+	Analysis.prototype.boundPacket = function (packet)	{
+		packet.amp = this.boundWithBounds(packet.amp, this.ampRange);
+		packet.pitch = this.boundWithBounds(packet.pitch, this.pitchRange);
+		return packet;
 	};
 
-	self.socket.on('pitchAmpPacket', function(data)	{
-		self.pushNewPacket(data);
-		self.calculateAverages();
-		self.printAverages();
-	});
+	Analysis.prototype.pushNewPacket = function(packet) {
+		this.packets.push(this.boundPacket(packet));
+		if (this.packets.length > this.sampleLength)	{
+			this.packets = this.packets.slice(1, this.packets.length - 1);
+		}
+	};
 
-	self.$pitch = $('#pitch');
-	self.$amp = $('#amp');
-};
-
-Analysis.prototype.boundWithBounds = function (value, bounds)	{
-	value = value > bounds.high ? bounds.high : value;
-	value = value < bounds.low ? bounds.low : value;
-	return value;
-}
-
-Analysis.prototype.boundPacket = function (packet)	{
-	packet.amp = this.boundWithBounds(packet.amp, this.ampRange);
-	packet.pitch = this.boundWithBounds(packet.pitch, this.pitchRange);
-	return packet;
-};
-
-Analysis.prototype.pushNewPacket = function(packet) {
-	this.packets.push(this.boundPacket(packet));
-	if (this.packets.length > this.sampleLength)	{
-		this.packets = this.packets.slice(1, this.packets.length - 1);
-	}
-};
-
-Analysis.prototype.calculateAverages = function ()	{
-	var t_pitch = 0;
-	var t_amp = 0;
-	var scaleValue = this.packets.length > 0 ? this.packets.length : 1;
-	for (var i = 0; i < this.packets.length; i++)	{
-		t_pitch += this.packets[i].pitch;
-		t_amp += this.packets[i].amp;
-	}
-	this.pitch = Math.round(t_pitch / scaleValue);
-	this.amp = Math.round(t_amp / scaleValue);
-};
+	Analysis.prototype.calculateAverages = function ()	{
+		var t_pitch = 0;
+		var t_amp = 0;
+		var scaleValue = this.packets.length > 0 ? this.packets.length : 1;
+		for (var i = 0; i < this.packets.length; i++)	{
+			t_pitch += this.packets[i].pitch;
+			t_amp += this.packets[i].amp;
+		}
+		this.pitch = Math.round(t_pitch / scaleValue);
+		this.amp = Math.round(t_amp / scaleValue);
+	};
 
 //	give this a {pitch, amp} object, get a mapped one back
 Analysis.prototype.mapValues = function (input)	{
 	return {
-	 	pitch: 	Math.round((input.pitch / this.pitchRange.high) * 5),
-	 	amp: 	Math.round((input.amp / this.ampRange.high) * 5)
+		pitch: 	Math.round((input.pitch / this.pitchRange.high) * 5),
+		amp: 	Math.round((input.amp / this.ampRange.high) * 5)
 	}
 };
 
@@ -216,6 +219,8 @@ Dan stuff
 */
 
 function t(){
+	r1=Math.ceil(Math.random()*5)
+	r2=Math.ceil(Math.random()*5)
 	$("#speech-page-content").val(phrases[Math.ceil(phrases.length*Math.random())])
 	newMessage();
 }

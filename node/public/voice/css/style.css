@@ -20,7 +20,7 @@
 	width: 100%;
 }
 
-.message {
+.message,.messageSmall {
 	padding-left: 40px;
 	padding-right: 40px;
 	padding-top: 20px;
@@ -31,6 +31,10 @@
 	text-align: left;
 	transition: 0.5s;
 	color: white;
+}
+
+.messageSmall {
+	opacity: 0;
 }
 
 .message.active {
