@@ -1,3 +1,4 @@
+var socket = io();
 var recognition;
 var interimResult = '';
 var textArea = $('#speech-page-content');
@@ -15,6 +16,20 @@ $(document).ready(function() {
 });
 
 
+/**
+New from Dan
+**/
+
+socket.on('promptScreen', function(msg){
+	console.log("Prompt: "+msg);
+	$("#speech-page-content").val(msg)
+	newMessage();
+});
+
+
+/**
+End new from Dan
+**/
 function ku(){
 
 	
