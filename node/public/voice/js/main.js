@@ -111,9 +111,9 @@ function newMessage(){
 
 function saveLatest(text, pitch, amplitude)	{
 	socket.emit('newVoiceData', {
-		text: 			'test',
-		pitch: 			10,
-		amplitude: 		10
+		text: 			text,
+		pitch: 			pitch,
+		amplitude: 		amplitude
 	});
 }
 
@@ -152,6 +152,9 @@ var Analysis = function ()	{
 	};
 
 	self.socket.on('pitchAmpPacket', function(data)	{
+		if (!keyIsDown)	{
+			return;
+		}
 		self.pushNewPacket(data);
 		self.calculateAverages();
 		self.printAverages();
