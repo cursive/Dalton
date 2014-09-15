@@ -5,5 +5,35 @@
         "amplitude": 10,
         "font": "Test Font",
         "timestamp": 1410807284739
+    },
+    {
+        "text": "Two things are infinite: the universe and human stupidity; and I'm not sure about the universe",
+        "pitch": 0,
+        "amplitude": 0,
+        "timestamp": 1410810949461
+    },
+    {
+        "text": "A room without books is like a body without a soul",
+        "pitch": 0,
+        "amplitude": 0,
+        "timestamp": 1410810950426
+    },
+    {
+        "text": "So many books, so little time",
+        "pitch": 0,
+        "amplitude": 0,
+        "timestamp": 1410810950913
+    },
+    {
+        "text": "",
+        "pitch": 0,
+        "amplitude": 0,
+        "timestamp": 1410810951375
+    },
+    {
+        "text": "Two things are infinite: the universe and human stupidity; and I'm not sure about the universe",
+        "pitch": 0,
+        "amplitude": 0,
+        "timestamp": 1410810952114
     }
 ]

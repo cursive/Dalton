@@ -106,15 +106,17 @@ function newMessage(){
 		console.log("height: "+$(".message:last-child").height())
 		TweenMax.to(".messages",0.5,{top:"-="+h})
 	}
+
+	var finalPitchAmp = a.getFinalPitchAmp();
+	saveLatest(msg, finalPitchAmp.pitch, finalPitchAmp.amp);
 }
 
 
-
-function saveLatest(text, pitch, amplitude, font)	{
+function saveLatest(text, pitch, amplitude)	{
 	socket.emit('newVoiceData', {
-		text: 			$("#speech-page-content").val(),
-		pitch: 			10,
-		amplitude: 		10
+		text: 			text,
+		pitch: 			pitch,
+		amplitude: 		amplitude
 	});
 }
 
@@ -153,6 +155,9 @@ function saveLatest(text, pitch, amplitude, font)	{
 		};
 
 		self.socket.on('pitchAmpPacket', function(data)	{
+			if (!keyIsDown)	{
+				return;
+			}
 			self.pushNewPacket(data);
 			self.calculateAverages();
 			self.printAverages();
@@ -201,6 +206,15 @@ Analysis.prototype.mapValues = function (input)	{
 	}
 };
 
+Analysis.prototype.getFinalPitchAmp = function ()	{
+	var retVal = this.mapValues({
+		amp: 	this.amp,
+		pitch: 	this.pitch
+	});
+	this.newPhrase()
+	return retVal;
+};
+
 Analysis.prototype.printAverages = function ()	{
 	this.$pitch.text(this.pitch);
 	this.$amp.text(this.amp);
@@ -210,6 +224,7 @@ Analysis.prototype.printAverages = function ()	{
 
 Analysis.prototype.newPhrase = function ()	{
 	this.packets = [];
+	this.pitch = this.amp = 0;
 };
 
 var a = new Analysis();
